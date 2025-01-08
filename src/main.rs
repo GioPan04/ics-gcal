@@ -83,7 +83,9 @@ async fn main() -> anyhow::Result<()> {
 
     HttpServer::new(move || {
         App::new()
-            .wrap(Logger::default())
+            .wrap(Logger::new(
+                r#"%{r}a "%r" %s %b "%{Referer}i" "%{User-Agent}i" %T"#,
+            ))
             .app_data(web::Data::new(AppState {
                 db: db_pool.clone(),
             }))
