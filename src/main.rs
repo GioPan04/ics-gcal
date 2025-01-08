@@ -17,6 +17,7 @@ async fn fetch_calendar(cal: &models::calendar::Calendar) -> Result<String, reqw
     }
 
     let res = client.send().await?.text().await?;
+    let res = res.replace("TRANSP:OPAQUE", "TRANSP:TRANSPARENT");
 
     Ok(res)
 }
