@@ -82,7 +82,7 @@ async fn main() -> anyhow::Result<()> {
                 db: db_pool.clone(),
             }))
             .route("/calendar/", web::post().to(add_calendar))
-            .route("/calendar/{cal_id}", web::get().to(get_calendar))
+            .route("/calendar/{cal_id}.ics", web::get().to(get_calendar))
     })
     .bind(("0.0.0.0", 8080))?
     .run()
