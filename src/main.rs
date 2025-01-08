@@ -1,4 +1,4 @@
-use actix_web::{web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{middleware::Logger, web, App, HttpResponse, HttpServer, Responder};
 use serde::Serialize;
 use sqlx::{sqlite::SqlitePoolOptions, Pool, Sqlite};
 use uuid::Uuid;
@@ -75,12 +75,15 @@ async fn add_calendar(
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
+    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
+
     let db_pool = SqlitePoolOptions::new()
         .connect("sqlite:database.db")
         .await?;
 
     HttpServer::new(move || {
         App::new()
+            .wrap(Logger::default())
             .app_data(web::Data::new(AppState {
                 db: db_pool.clone(),
             }))
